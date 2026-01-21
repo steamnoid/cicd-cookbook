@@ -69,6 +69,23 @@ progressive-delivery/
 rollback-safety/
 observability-feedback/
 Each pattern must live in exactly one category.
+
+Project Context (CRITICAL)
+This cookbook is being built to support a high-throughput, distributed backend platform in a regulated financial/ledger domain.
+Assume:
+- microservices and/or distributed components
+- rolling deployments (mixed-version windows)
+- strict correctness expectations (ledger-like invariants)
+- privacy constraints (limited access to data; telemetry must be designed carefully)
+
+Recruiting Alignment (CRITICAL)
+When choosing the next pattern, prefer patterns that demonstrate and reinforce Senior QA / delivery ownership for distributed backend systems:
+- backend/API testing in distributed or microservices environments
+- test automation and CI/CD gating (binary pass/fail/degrade)
+- quality metrics that drive release decisions
+- release planning/coordination failure modes (promotion, rollout, rollback)
+
+This alignment affects ordering only; it does not relax any structure, quality, or category constraints.
 Pattern Naming Rules
 Pattern names must:
 describe the problem, not the tool
@@ -90,6 +107,30 @@ Wait for explicit approval (proceed)
 Only then generate files for that pattern
 No bulk generation.
 No parallel patterns.
+
+Pattern Ordering Rules (CRITICAL)
+When proposing the next pattern, prefer the simplest pattern that delivers the highest risk reduction per unit of complexity.
+Order patterns from:
+- highest value / lowest effort
+- to lower value / higher effort
+
+Define “simplicity” concretely as:
+- minimal number of moving parts to enforce the guardrail
+- minimal cross-team coordination required
+- minimal new runtime dependencies
+- minimal operational surface area
+- minimal cost to adopt and run (CI minutes, infra, vendor spend)
+
+Implementation Bias (ORDERING ONLY)
+All else equal, prefer patterns that can be enforced in CI/CD (pre-merge / pre-promotion) without introducing new always-on runtime services or long-lived operational components.
+
+Define “value” concretely as:
+- prevents a common, high-severity production failure mode
+- introduces a measurable signal that changes decisions
+- blocks failures before broad user impact
+
+If two candidate patterns are similar value, choose the simpler one first.
+
 Example First Patterns (SEED ONLY)
 Copilot may start with ONE of:
 rollback-safe-schema-changes
@@ -119,7 +160,3 @@ a CI/CD maturity checklist
 a guardrail decision aid
 a teaching tool for senior engineers
 Not as a tutorial.
-First Instruction to Copilot
-Propose the first cookbook pattern, following the rules above.
-Do not generate files yet.
-Explain the problem it addresses and why it matters.
